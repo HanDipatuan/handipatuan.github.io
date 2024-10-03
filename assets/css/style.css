@@ -517,7 +517,7 @@ main {
 .service-title { margin-bottom: 20px; }
 
 .service-list {
-  display: grid;
+  display: block;
   grid-template-columns: 1fr;
   gap: 20px;
 }
@@ -1400,6 +1400,7 @@ textarea.form-input::-webkit-resizer { display: none; }
     align-items: flex-start;
     gap: 18px;
     padding: 30px;
+    margin-bottom: 15px;
   }
 
   .service-icon-box {
