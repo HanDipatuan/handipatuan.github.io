@@ -379,7 +379,7 @@ main {
 }
 
 .info_more-btn:hover,
-.info_more-btn:focus { background: lightcoral; }
+.info_more-btn:focus { background: lightcoral; color: white; }
 
 .info_more-btn:hover::before,
 .info_more-btn:focus::before { background: lightcoral; }
@@ -529,6 +529,7 @@ main {
   border-radius: 14px;
   box-shadow: var(--shadow-2);
   z-index: 1;
+  margin-bottom: 15px;
 }
 
 .service-item::before {
