@@ -831,6 +831,159 @@ main {
 }
 
 
+/* Project Lightbox */
+.project-lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  padding: 24px;
+  background: rgba(0, 0, 0, 0.88);
+  align-items: center;
+  justify-content: center;
+}
+
+.project-lightbox.is-open {
+  display: flex;
+}
+
+.project-lightbox-content {
+  position: relative;
+  width: min(1200px, 96vw);
+  max-height: 96vh;
+  overflow: visible;
+  padding: 24px;
+  border-radius: 16px;
+  background: #202020;
+  text-align: center;
+}
+
+.project-lightbox-content h2 {
+  margin: 0 40px 20px;
+  color: #fff;
+  font-size: 22px;
+}
+
+.lightbox-image-wrapper {
+  overflow: auto;
+  max-height: 75vh;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.project-lightbox-content img {
+  display: block;
+  max-width: 100%;
+  max-height: 75vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  cursor: grab;
+  user-select: none;
+}
+
+.project-lightbox-content img.is-dragging {
+  cursor: grabbing;
+}
+
+.lightbox-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 0;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  font-size: 28px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  transition: background 0.2s;
+}
+
+.lightbox-nav:hover {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.lightbox-prev { left: 8px; }
+.lightbox-next { right: 8px; }
+
+.lightbox-close {
+  position: absolute;
+  top: 8px;
+  right: 14px;
+  border: 0;
+  background: transparent;
+  color: #fff;
+  font-size: 32px;
+  cursor: pointer;
+}
+
+.lightbox-zoom-actions {
+  position: absolute;
+  top: 8px;
+  right: 52px;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.lightbox-zoom-btn {
+  width: 34px;
+  height: 34px;
+  border: 2px solid rgba(255, 255, 255, 0.7);
+  border-radius: 50%;
+  background: transparent;
+  color: #fff;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.lightbox-zoom-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.lightbox-zoom-btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.lightbox-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+#lightbox-website {
+  display: inline-block;
+  padding: 12px 22px;
+  border-radius: 8px;
+  background: #ff6f3c;
+  color: #fff;
+  text-decoration: none;
+}
+
+#lightbox-website:hover {
+  opacity: 0.85;
+}
+
+body.lightbox-open {
+  overflow: hidden;
+}
+
 /**
  * skills 
  */

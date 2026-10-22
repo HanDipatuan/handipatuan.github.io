@@ -157,3 +157,140 @@ for (let i = 0; i < navigationLinks.length; i++) {
 
   });
 }
+
+/* Project Lightbox Gallery */
+(function () {
+  const lightbox = document.getElementById("project-lightbox");
+  const lightboxImage = document.getElementById("lightbox-image");
+  const lightboxTitle = document.getElementById("lightbox-title");
+  const lightboxWebsite = document.getElementById("lightbox-website");
+  const closeButton = lightbox ? lightbox.querySelector(".lightbox-close") : null;
+  const prevButton = lightbox ? lightbox.querySelector(".lightbox-prev") : null;
+  const nextButton = lightbox ? lightbox.querySelector(".lightbox-next") : null;
+  const zoomInButton = document.getElementById("lightbox-zoom-in");
+  const zoomOutButton = document.getElementById("lightbox-zoom-out");
+
+  if (!lightbox || !lightboxImage || !lightboxTitle ||
+      !lightboxWebsite || !closeButton || !prevButton || !nextButton ||
+      !zoomInButton || !zoomOutButton) {
+    return;
+  }
+
+  const triggers = Array.from(document.querySelectorAll(".project-lightbox-trigger"));
+  let currentIndex = 0;
+  let zoomLevel = 1;
+  const ZOOM_STEP = 0.25;
+  const ZOOM_MAX = 3;
+
+  function applyZoom() {
+    if (zoomLevel === 1) {
+      lightboxImage.style.width = "";
+      lightboxImage.style.maxHeight = "";
+      lightboxImage.style.maxWidth = "";
+    } else {
+      lightboxImage.style.width = (100 * zoomLevel) + "%";
+      lightboxImage.style.maxHeight = "none";
+      lightboxImage.style.maxWidth = "none";
+    }
+    zoomOutButton.disabled = zoomLevel <= 1;
+    zoomInButton.disabled = zoomLevel >= ZOOM_MAX;
+  }
+
+  function resetZoom() {
+    zoomLevel = 1;
+    applyZoom();
+  }
+
+  function showItem(index) {
+    const item = triggers[index];
+    const img = item.querySelector("img");
+    const titleEl = item.querySelector(".project-title");
+    const website = item.getAttribute("href");
+
+    lightboxImage.src = img ? img.src : "";
+    lightboxImage.alt = img ? img.alt : "Project preview";
+    lightboxTitle.textContent = titleEl ? titleEl.textContent : "";
+    lightboxWebsite.href = website || "#";
+    lightboxWebsite.style.display = (website && website !== "#") ? "" : "none";
+    resetZoom();
+  }
+
+  triggers.forEach((item, index) => {
+    item.addEventListener("click", (event) => {
+      event.preventDefault();
+      currentIndex = index;
+      showItem(currentIndex);
+      lightbox.classList.add("is-open");
+      lightbox.setAttribute("aria-hidden", "false");
+      document.body.classList.add("lightbox-open");
+      closeButton.focus();
+    });
+  });
+
+  zoomInButton.addEventListener("click", () => {
+    if (zoomLevel < ZOOM_MAX) { zoomLevel = Math.min(zoomLevel + ZOOM_STEP, ZOOM_MAX); applyZoom(); }
+  });
+
+  zoomOutButton.addEventListener("click", () => {
+    if (zoomLevel > 1) { zoomLevel = Math.max(zoomLevel - ZOOM_STEP, 1); applyZoom(); }
+  });
+
+  // Drag to pan
+  const imageWrapper = lightbox.querySelector(".lightbox-image-wrapper");
+  let isDragging = false;
+  let dragStartX, dragStartY, scrollStartX, scrollStartY;
+
+  lightboxImage.addEventListener("mousedown", (e) => {
+    isDragging = true;
+    dragStartX = e.clientX;
+    dragStartY = e.clientY;
+    scrollStartX = imageWrapper.scrollLeft;
+    scrollStartY = imageWrapper.scrollTop;
+    lightboxImage.classList.add("is-dragging");
+    e.preventDefault();
+  });
+
+  document.addEventListener("mousemove", (e) => {
+    if (!isDragging) return;
+    imageWrapper.scrollLeft = scrollStartX - (e.clientX - dragStartX);
+    imageWrapper.scrollTop = scrollStartY - (e.clientY - dragStartY);
+  });
+
+  document.addEventListener("mouseup", () => {
+    if (isDragging) {
+      isDragging = false;
+      lightboxImage.classList.remove("is-dragging");
+    }
+  });
+
+  function closeLightbox() {
+    lightbox.classList.remove("is-open");
+    lightbox.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("lightbox-open");
+  }
+
+  prevButton.addEventListener("click", () => {
+    currentIndex = (currentIndex - 1 + triggers.length) % triggers.length;
+    showItem(currentIndex);
+  });
+
+  nextButton.addEventListener("click", () => {
+    currentIndex = (currentIndex + 1) % triggers.length;
+    showItem(currentIndex);
+  });
+
+  closeButton.addEventListener("click", closeLightbox);
+
+  lightbox.addEventListener("click", (event) => {
+    if (event.target === lightbox) {
+      closeLightbox();
+    }
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (!lightbox.classList.contains("is-open")) return;
+    if (event.key === "Escape") closeLightbox();
+    if (event.key === "ArrowLeft") { currentIndex = (currentIndex - 1 + triggers.length) % triggers.length; showItem(currentIndex); }
+    if (event.key === "ArrowRight") { currentIndex = (currentIndex + 1) % triggers.length; showItem(currentIndex); }
+  });
+}());
